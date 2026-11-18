@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>U.S. Court Developments Tracker</title>
+<style>
+body{font-family:Segoe UI,Arial,sans-serif;margin:0;background:#f6f6f4;color:#1b1b1b}header{background:#1b2a3a;color:#fff;padding:16px 24px}
+h1{margin:0;font-size:20px}.sub{font-size:13px;opacity:.8}main{padding:16px 24px}.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.kpi{background:#fff;border:1px solid #ddd;padding:10px;cursor:pointer}.kpi b{display:block;font-size:24px}.kpi.on{outline:2px solid #1b2a3a}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}select,input,button{padding:7px;font-size:14px;border:1px solid #bbb;background:#fff}button{cursor:pointer}
+table{width:100%;border-collapse:collapse;background:#fff}th,td{padding:8px;border-bottom:1px solid #e5e5e5;text-align:left;vertical-align:top;font-size:14px}
+th{background:#eee}.tag{font-size:11px;padding:2px 6px;border-radius:3px;white-space:nowrap}.rules{background:#dde8fb}.ops{background:#fbdddd}.tech{background:#e9defb}.judicial{background:#fbefd2}.practice{background:#d9f2df}
+.new{font-weight:600}.muted{color:#666;font-size:12px}.err{color:#a33;font-size:12px;margin-top:8px}a{color:#1b4f8a}
+</style></head><body>
+<header><h1>U.S. Court Developments Tracker</h1><div class="sub">Federal and state courts · <span id="status">Loading…</span></div></header>
+<div style="background:#fff7d6;border-bottom:1px solid #e6d27a;padding:8px 24px;font-size:13px">Informational only. Updates are gathered automatically from court websites and may be incomplete, delayed or miscategorized. This is not legal advice; always confirm with the court’s official website.</div><main>
+<div class="kpis" id="kpis"></div>
+<div class="bar">
+<select id="lvl"><option value="">All court levels</option></select>
+<input id="q" placeholder="Search court, headline, text" size="32">
+<label class="muted"><input type="checkbox" id="unread"> Unreviewed only</label>
+<button id="csv">Export CSV</button>
+</div>
+<table><thead><tr><th>Posted</th><th>Court</th><th>Category</th><th>Development</th><th>Reviewed</th></tr></thead><tbody id="rows"></tbody></table>
+<div class="err" id="errs"></div>
+</main>
+<script>
+const CATS={rules:'Rules & Procedural Changes',ops:'Closures & Operational Alerts',tech:'E-Filing & Technology',judicial:'Judicial & Administrative',practice:'Litigation Practice Intelligence'};
+let data={items:[]},cat='',seen=JSON.parse(localStorage.getItem('seen')||'{}');
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function load(){const r=await fetch('data.json?'+Date.now());data=await r.json();
+ document.getElementById('status').textContent=`${data.sources} sources · last checked ${data.lastRun?new Date(data.lastRun).toLocaleString():'—'} · checked about every 30 min`;
+ const lv=document.getElementById('lvl'),cur=lv.value;lv.innerHTML='<option value="">All court levels</option>'+[...new Set(data.items.map(i=>i.level))].sort().map(l=>`<option ${l===cur?'selected':''}>${esc(l)}</option>`).join('');
+ document.getElementById('errs').textContent=data.errors.length?'Sources not reached on last run: '+data.errors.join('; '):'';render();}
+function filtered(){const q=document.getElementById('q').value.toLowerCase(),lv=document.getElementById('lvl').value,u=document.getElementById('unread').checked;
+ return data.items.filter(i=>(!cat||i.cat===cat)&&(!lv||i.level===lv)&&(!u||!seen[i.id])&&(!q||(i.court+i.title+i.detail).toLowerCase().includes(q)));}
+function render(){document.getElementById('kpis').innerHTML=Object.entries(CATS).map(([k,v])=>`<div class="kpi ${cat===k?'on':''}" data-c="${k}">${v}<b>${data.items.filter(i=>i.cat===k).length}</b><span class="muted">${data.items.filter(i=>i.cat===k&&!seen[i.id]).length} unreviewed</span></div>`).join('');
+ document.querySelectorAll('.kpi').forEach(e=>e.onclick=()=>{cat=cat===e.dataset.c?'':e.dataset.c;render();});
+ document.getElementById('rows').innerHTML=filtered().map(i=>`<tr class="${seen[i.id]?'':'new'}"><td>${esc(i.posted)}</td><td>${esc(i.court)}<div class="muted">${esc(i.level)}</div></td>
+ <td><select data-id="${i.id}" class="tag ${i.cat}">${Object.entries(CATS).map(([k,v])=>`<option value="${k}" ${k===i.cat?'selected':''}>${v}</option>`).join('')}</select></td>
+ <td><a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title)}</a><div class="muted">${esc(i.detail)}</div><div class="muted">${esc(i.source)}</div></td>
+ <td><input type="checkbox" data-seen="${i.id}" ${seen[i.id]?'checked':''}></td></tr>`).join('')||'<tr><td colspan="5" class="muted">No items yet – the first refresh records a baseline for watched pages; changes appear on later runs.</td></tr>';
+ document.querySelectorAll('[data-seen]').forEach(c=>c.onchange=()=>{seen[c.dataset.seen]=c.checked;localStorage.setItem('seen',JSON.stringify(seen));render();});
+ document.querySelectorAll('select[data-id]').forEach(s=>s.onchange=()=>{data.items.find(i=>i.id===s.dataset.id).cat=s.value;render();});}
+['q','lvl','unread'].forEach(x=>document.getElementById(x).oninput=render);
+
+document.getElementById('csv').onclick=()=>{const rows=[['Posted','Court','Level','Category','Headline','Detail','Link']].concat(filtered().map(i=>[i.posted,i.court,i.level,CATS[i.cat],i.title,i.detail,i.link]));
+ const b=new Blob([rows.map(r=>r.map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n')],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='court-developments.csv';a.click();};
+load();setInterval(load,5*60000);
+</script></body></html>

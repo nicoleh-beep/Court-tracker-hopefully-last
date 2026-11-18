@@ -1,0 +1,90 @@
+{
+  "feeds": [
+    {
+      "name": "Fed. Cir. – General Announcements",
+      "court": "Fed. Cir.",
+      "level": "Federal – Circuit",
+      "url": "https://www.cafc.uscourts.gov/category/general-announcement/feed"
+    }
+  ],
+  "watchPages": [
+    {
+      "name": "U.S. Courts – Pending Rules Amendments",
+      "court": "Judicial Conference",
+      "level": "Federal – National",
+      "url": "https://www.uscourts.gov/forms-rules/pending-rules-and-forms-amendments"
+    },
+    {
+      "name": "U.S. Courts – Proposed Amendments for Comment",
+      "court": "Judicial Conference",
+      "level": "Federal – National",
+      "url": "https://www.uscourts.gov/forms-rules/proposed-amendments-published-public-comment"
+    },
+    {
+      "name": "U.S. Courts – Current Rules",
+      "court": "Judicial Conference",
+      "level": "Federal – National",
+      "url": "https://www.uscourts.gov/forms-rules/current-rules-practice-procedure"
+    },
+    {
+      "name": "Fed. Cir. – Notices",
+      "court": "Fed. Cir.",
+      "level": "Federal – Circuit",
+      "url": "https://www.cafc.uscourts.gov/home/the-court/notices-announcements"
+    },
+    {
+      "name": "5th Cir. – News",
+      "court": "5th Cir.",
+      "level": "Federal – Circuit",
+      "url": "https://www.ca5.uscourts.gov/news"
+    },
+    {
+      "name": "10th Cir. – News",
+      "court": "10th Cir.",
+      "level": "Federal – Circuit",
+      "url": "https://www.ca10.uscourts.gov/news/2026"
+    },
+    {
+      "name": "N.D. Tex. – News",
+      "court": "N.D. Tex.",
+      "level": "Federal – District",
+      "url": "https://www.txnd.uscourts.gov/news"
+    },
+    {
+      "name": "S.D. Ill. – News",
+      "court": "S.D. Ill.",
+      "level": "Federal – District",
+      "url": "https://www.ilsd.uscourts.gov/news"
+    },
+    {
+      "name": "Bankr. C.D. Cal. – News",
+      "court": "Bankr. C.D. Cal.",
+      "level": "Federal – Bankruptcy",
+      "url": "https://www.cacb.uscourts.gov/news"
+    },
+    {
+      "name": "Bankr. D. Md. – Announcements",
+      "court": "Bankr. D. Md.",
+      "level": "Federal – Bankruptcy",
+      "url": "https://www.mdb.uscourts.gov/announcements"
+    },
+    {
+      "name": "Washington Courts – Emergency Closures",
+      "court": "Washington (statewide)",
+      "level": "State – Trial",
+      "url": "https://www.courts.wa.gov/emergency/?fa=emergency.emergencyCourtInformation"
+    },
+    {
+      "name": "Georgia Supreme Court – Rule Amendments",
+      "court": "Supreme Court of Georgia",
+      "level": "State – Supreme/Appellate",
+      "url": "https://www.gasupreme.us/rules/amendments-to-rules/"
+    },
+    {
+      "name": "Nebraska – Rule Amendments",
+      "court": "Nebraska Supreme Court",
+      "level": "State – Supreme/Appellate",
+      "url": "https://supremecourt.nebraska.gov/rules/rule-amendments"
+    }
+  ]
+}

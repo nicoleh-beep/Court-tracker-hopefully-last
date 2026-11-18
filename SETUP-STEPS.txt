@@ -1,0 +1,34 @@
+COURT UPDATE TRACKER – SETUP (new repository)
+
+A. Create the repository
+ 1. github.com -> "+" (top right) -> New repository.
+ 2. Name it (e.g., court-update-tracker). Choose PUBLIC. Leave "Add a README" unchecked. Create.
+
+B. Upload the four files (all at the top level – no folders)
+ 3. On the new repository page click "uploading an existing file" (or Add file -> Upload files).
+ 4. Drag in ONLY these four files:  index.html   data.json   sources.json   update.js
+    (Do not upload this SETUP file, workflow.yml, or the zip.)
+ 5. Click "Commit changes".
+
+C. Create the workflow file (this is the only file that goes in a folder)
+ 6. Add file -> Create new file.
+ 7. In the name box type exactly:   .github/workflows/update.yml
+    (Typing the slashes creates the folders automatically.)
+ 8. Open workflow.yml from this folder in Notepad, Ctrl+A, Ctrl+C, then paste into GitHub.
+ 9. Click "Commit changes" -> "Commit changes".
+
+D. Settings
+10. Settings -> Actions -> General -> "Workflow permissions": Read and write permissions -> Save.
+11. Settings -> Pages -> Source: Deploy from a branch -> Branch: main, folder: / (root) -> Save.
+
+E. Run it
+12. Actions tab -> "Update court tracker" (left) -> Run workflow -> Run workflow.
+13. Click the new run at the top of the list. All steps should show green checks.
+    If "Check files are in place" fails, its log names the missing file – upload it at the top level.
+
+F. Open the site
+14. https://<your-username>.github.io/<repository-name>/   (allow a few minutes the first time)
+
+Your repository should show exactly:  .github   data.json   index.html   sources.json   update.js
+The first run records a baseline for watched pages; changes appear on later runs.
+Annotations about "Node.js 20 is deprecated" or "ubuntu-latest" are notices only and can be ignored.
